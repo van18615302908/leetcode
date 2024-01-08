@@ -10,7 +10,8 @@
                 "${file}",
                 // "-fexec-charset=gbk",
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}.exe",
+                // "${fileDirname}/${fileBasenameNoExtension}.exe",
+                "${workspaceFolder}\\work\\${fileBasenameNoExtension}.exe"//修改.exe文件生成位置
             ],
             "options": {
                 "cwd": "${fileDirname}"

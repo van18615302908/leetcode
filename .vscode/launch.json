@@ -18,7 +18,8 @@
             // ],
             // "externalConsole": true,
             /* 内部终端输出（断点有效） */
-            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
+            // "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
+            "program": "${workspaceFolder}\\work\\${fileBasenameNoExtension}.exe",  // 将 "your_executable_name.exe" 替换为实际的可执行文件名
             "args": [],
             "externalConsole": false,
             "stopAtEntry": false,
