@@ -118,3 +118,40 @@ public:
 - `dictionary[i]` 和 `s` 只包含小写英文字母。
 - `dictionary` 中的单词互不相同。 
 
+题目要求将字符串 sss 分割成若干个互不重叠的子字符串（以下简称为子串），同时要求每个子串都必须在 dictionary\textit{dictionary}dictionary 中出现。一些额外的字符可能不属于任何子串，而题目要求最小化这些额外字符的数量。
+
+设 nnn 是 sss 的长度，现在有两种基本的分割方案：
+
+把 sss 的最后一个字符 s[n−1]s[n-1]s[n−1] 当做是额外字符，那么问题转为长度为 n−1n-1n−1 的子问题。
+找到一个 jjj 使得 sss 的后缀 s[j...n−1]s[j...n-1]s[j...n−1] 构成的子串在 dictionary\textit{dictionary}dictionary，那么问题转为长度为 j−1j-1j−1 的子问题。
+因此，定义 d[i]d[i]d[i] 为 sss 前缀 s[0...i−1]s[0...i-1]s[0...i−1] 的子问题，那么 d[i]d[i]d[i] 取下面两种情况的最小值：
+
+把 s[i−1]s[i-1]s[i−1] 当做是额外字符，d[i]=d[i−1]+1d[i] = d[i - 1] + 1d[i]=d[i−1]+1。
+遍历所有的 j(j∈[0,i−1])j(j \in [0, i-1])j(j∈[0,i−1])，如果子字符串 s[j...i−1]s[j...i-1]s[j...i−1] 存在于 dictionary\textit{dictionary}dictionary 中，那么 d[i]=min⁡d[j]d[i] = \min d[j]d[i]=mind[j]。
+初始状态 d[0]=0d[0] = 0d[0]=0，最终答案为 d[n]d[n]d[n]。
+
+查找子串 s[j...i−1]s[j...i-1]s[j...i−1] 是否存在于 dictionary\textit{dictionary}dictionary 可以使用哈希表。另外在实现动态规划时，可以使用记忆化搜索，也可以使用递推，这两种方式在时空复杂度方面并没有明显差异。
+
+```cpp
+class Solution {
+public:
+    int minExtraChar(string s, vector<string>& dictionary) {
+        int n = s.size();
+        vector<int> d(n + 1, INT_MAX);
+        unordered_map<string, int> calculated;
+        for (auto a : dictionary) {
+            calculated[a]++;
+        }
+        d[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            d[i] = d[i - 1] + 1;
+            for (int j = i - 1; j >= 0; j--) {
+                if (calculated.count(s.substr(j, i - j))) {
+                    d[i] = min(d[i], d[j]);
+                }
+            }
+        }
+        return d[n];
+    }
+};
+```
