@@ -200,3 +200,31 @@ public:
 
 - `1 <= word.length <= 50`
 - `word` 仅由字母 "a"、"b" 和 "c" 组成。
+
+
+思路与算法
+
+定义状态 d[i]d[i]d[i] 为将前 iii 个字符（为了方便编码，下标从 111 开始）拼凑成若干个 abc\textit{abc}abc 所需要的最小插入数。那么初始状态 d[0]=0d[0] = 0d[0]=0，最终要求解 d[n]d[n]d[n]，其中 nnn 为 word\textit{word}word 的长度。
+
+转移过程有以下几种情况：
+
+word[i]\textit{word}[i]word[i] 单独存在于一组 abc\textit{abc}abc 中，d[i]=d[i−1]+2d[i] = d[i - 1] + 2d[i]=d[i−1]+2。
+如果 word[i]>word[i−1]\textit{word}[i] \gt \textit{word}[i - 1]word[i]>word[i−1]，那么 word[i]\textit{word}[i]word[i] 可以和 word[i−1]\textit{word}[i - 1]word[i−1] 在同一组 abc\textit{abc}abc 中，d[i]=d[i−1]−1d[i] = d[i - 1] - 1d[i]=d[i−1]−1。
+d[i]d[i]d[i] 取以上情况的最小值。在本题中，每个字符总是尽可能的与前面的字符去组合，因此情况 222 优于情况 111（从动态转移方程中也可以发现此规律），按照顺序依次更新 d[i]d[i]d[i] 即可，并不需要取最小值。
+
+```cpp
+class Solution {
+public:
+    int addMinimum(string word) {
+        int n = word.size();
+        vector<int> d(n+1,0);
+        for (int i = 1;i < n + 1;i++){
+            d[i] = d[i - 1] + 2;
+            if(i > 1 && word[i -1] > word[i -2]){
+                d[i] = d[i - 1] - 1;
+            }
+        return d[n];
+        }
+    }
+};
+```
